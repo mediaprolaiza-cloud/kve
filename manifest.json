@@ -1,0 +1,27 @@
+{
+  "name": "Cloudinary Video Player",
+  "short_name": "CloudVideo",
+  "description": "PWA for playing Cloudinary videos offline and online",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "any",
+  "scope": "./",
+  "lang": "en",
+  "categories": ["entertainment", "video", "media"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiM0RjQ2RTUiLz4KPHBhdGggZD0iTTk2IDQ4QzcxLjIgNDggNTEuMiA2OCA1MS4yIDk2QzUxLjIgMTI0IDcxLjIgMTQ0IDk2IDE0NEMxMjAuOCAxNDQgMTQwLjggMTI0IDE0MC44IDk2QzE0MC44IDY4IDEyMC44IDQ4IDk2IDQ4Wk05NiAxMjhDODMuMiAxMjggNzIuOCAxMTcuNiA3Mi44IDEwNC44QzcyLjggOTIgODMuMiA4MS42IDk2IDgxLjZDMTEyIDgxLjYgMTI4IDkyIDEyOCAxMDQuOEMxMjggMTE3LjYgMTEyIDEyOCA5NiAxMjhaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMTY4IDk2SDE0NC4wOEMxNDQuMDggNzIgMTI0IDUxLjIgOTYgNTEuMkM2OCA1MS4yIDQ4IDcyIDQ4IDk2SDI0QzI0IDUxLjIgNTEuMiAyNCA5NiAyNEMxNDAuOCAyNCAxNjggNTEuMiAxNjggOTZaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iNjQiIGZpbGw9IiM0RjQ2RTUiLz4KPHBhdGggZD0iTTI1NiAxMjhDMTkwLjQgMTI4IDEzOC4xIDE4MC4zIDEzOC4xIDI1NkMxMzguMSAzMzEuNyAxOTAuNCAzODQgMjU2IDM4NEMzMjEuNiAzODQgMzczLjkgMzMxLjcgMzczLjkgMjU2QzM3My45IDE4MC4zIDMyMS42IDEyOCAyNTYgMTI4Wk0yNTYgMzQxLjNDMjA1LjYgMzQxLjMgMTY0IDI5OS43IDE2NCAyNDkuM0MxNjQgMTk4LjkgMjA1LjYgMTU3LjMgMjU2IDE1Ny4zQzMxMiAxNTcuMyAzNTIgMTk4LjkgMzUyIDI0OS4zQzM1MiAyOTkuNyAzMTIgMzQxLjMgMjU2IDM0MS4zWiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTQ0OCAyNTZIMzg0LjIxQzM4NC4yMSAxOTIgMzI4IDEzNi42IDI1NiAxMzYuNkMxODQgMTM2LjYgMTI4IDE5MiAxMjggMjU2SDEyOEMxMjggMTkyIDE4MCAxMjggMjU2IDEyOEMzMzYgMTI4IDQ0OCAxOTIgNDQ4IDI1NloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

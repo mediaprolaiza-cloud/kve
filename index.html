@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloudinary Video Player PWA</title>
+    <meta name="description" content="PWA for playing Cloudinary videos">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACAAgMAAAAqH8+WAAAADFBMVEVMaXH///////8fHz/vQ0dLAAAAA3RSTlMAu7tChwb/AAAAIklEQVRo3u3PMQEAAAgDoK1/a63gB2uQBwsVc2u2CQAAsJwD+0sFAgAAAABJRU5ErkJggg==">
+    
+    <!-- Cloudinary Video Player CSS -->
+    <link href="https://unpkg.com/cloudinary-video-player@1.9.5/dist/cld-video-player.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header h1 i {
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        .install-btn {
+            background: white;
+            color: #4f46e5;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+        
+        .input-section {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .input-section h2 {
+            color: #4f46e5;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .url-input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        #videoUrl {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        #videoUrl:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+        }
+        
+        .quick-links {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .quick-links p {
+            color: #64748b;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .sample-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .sample-btn {
+            background: #e0e7ff;
+            color: #4f46e5;
+            border: 2px solid #c7d2fe;
+            padding: 10px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sample-btn:hover {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .video-section {
+            margin: 2rem 0;
+        }
+        
+        #video-player-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cld-video-player {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 500px;
+        }
+        
+        .video-info {
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #4f46e5;
+        }
+        
+        .video-info h3 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .label {
+            display: block;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .status, .source {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+        
+        .instructions h3 {
+            color: #4f46e5;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            margin-left: 1.5rem;
+            color: #475569;
+        }
+        
+        .instructions li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #1e293b;
+            color: white;
+            margin-top: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .footer p {
+            margin-bottom: 10px;
+        }
+        
+        .pwa-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        #pwaStatus {
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .offline-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+        
+        .offline-indicator.offline {
+            background: #ef4444;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .url-input-container {
+                flex-direction: column;
+            }
+            
+            #videoUrl, .btn-primary {
+                width: 100%;
+            }
+            
+            .btn-primary {
+                justify-content: center;
+            }
+            
+            .cld-video-player {
+                min-height: 300px;
+            }
+            
+            .header, .main-content {
+                padding: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5rem;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .install-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .sample-buttons {
+                flex-direction: column;
+            }
+            
+            .sample-btn {
+                width: 100%;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-cloud"></i>
+                Cloudinary Video Player
+            </h1>
+            <p class="subtitle">Progressive Web App for Streaming Videos</p>
+            <button id="installBtn" class="install-btn">
+                <i class="fas fa-download"></i> Install App
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2>
+                    <i class="fas fa-link"></i>
+                    Enter Cloudinary Video URL
+                </h2>
+                <div class="url-input-container">
+                    <input 
+                        type="text" 
+                        id="videoUrl" 
+                        placeholder="https://res.cloudinary.com/demo/video/upload/sample.mp4"
+                        value="https://res.cloudinary.com/demo/video/upload/sample.mp4"
+                    >
+                    <button id="loadVideo" class="btn-primary">
+                        <i class="fas fa-play"></i> Load Video
+                    </button>
+                </div>
+                
+                <div class="quick-links">
+                    <p>Try these sample videos:</p>
+                    <div class="sample-buttons">
+                        <button class="sample-btn" data-url="https://res.cloudinary.com/demo/video/upload/sample.mp4">
+                            Sample Video 1
+                        </button>
+                        <button class="sample-btn" data-url="https://res.cloudinary.com/demo/video/upload/dog.mp4">
+                            Sample Video 2
+                        </button>
+                        <button class="sample-btn" data-url="https://res.cloudinary.com/demo/video/upload/elephants.mp4">
+                            Sample Video 3
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-section">
+                <div id="video-player-container">
+                    <video 
+                        id="cloudinary-video-player"
+                        class="cld-video-player"
+                        controls
+                        autoplay
+                        playsinline
+                    ></video>
+                </div>
+                
+                <div class="video-info">
+                    <h3>
+                        <i class="fas fa-info-circle"></i>
+                        Video Information
+                    </h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">Player Status:</span>
+                            <span id="videoStatus" class="status">Ready to play</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">Source Type:</span>
+                            <span id="videoSource" class="source">Cloudinary Demo</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">App Status:</span>
+                            <span id="appStatus" class="status">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <h3>
+                    <i class="fas fa-mobile-alt"></i>
+                    Install as PWA
+                </h3>
+                <ol>
+                    <li><strong>Chrome/Edge:</strong> Click "Install App" button or look for install icon in address bar</li>
+                    <li><strong>Mobile Safari:</strong> Tap Share button → "Add to Home Screen"</li>
+                    <li><strong>Android Chrome:</strong> Tap menu (⋮) → "Add to Home screen"</li>
+                    <li>Once installed, the app will work offline and can be launched like a native app</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Cloudinary Video Player PWA © 2024</p>
+            <div class="pwa-status">
+                <span>Status: <span id="pwaStatus">Checking...</span></span>
+                <span id="offlineStatus" class="offline-indicator">
+                    <i class="fas fa-wifi"></i>
+                    <span>Online</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cloudinary SDKs -->
+    <script src="https://unpkg.com/cloudinary-core@2.13.0/cloudinary-core-shrinkwrap.min.js"></script>
+    <script src="https://unpkg.com/cloudinary-video-player@1.9.5/dist/cld-video-player.min.js"></script>
+
+    <script>
+        class CloudinaryVideoPWA {
+            constructor() {
+                this.videoPlayer = null;
+                this.deferredPrompt = null;
+                this.init();
+            }
+            
+            init() {
+                this.initVideoPlayer();
+                this.bindEvents();
+                this.initPWA();
+                this.checkOnlineStatus();
+                
+                // Load default video
+                this.loadVideo('https://res.cloudinary.com/demo/video/upload/sample.mp4');
+            }
+            
+            initVideoPlayer() {
+                try {
+                    const cld = cloudinary.Cloudinary.new({ 
+                        cloud_name: 'demo',
+                        secure: true
+                    });
+                    
+                    this.videoPlayer = cld.videoPlayer('cloudinary-video-player', {
+                        autoplay: false,
+                        muted: false,
+                        controls: true,
+                        preload: 'auto',
+                        transformation: {
+                            quality: 'auto',
+                            fetch_format: 'auto'
+                        }
+                    });
+                    
+                    // Event listeners
+                    this.videoPlayer.on('play', () => {
+                        this.updateVideoStatus('Playing', '#10b981');
+                    });
+                    
+                    this.videoPlayer.on('pause', () => {
+                        this.updateVideoStatus('Paused', '#f59e0b');
+                    });
+                    
+                    this.videoPlayer.on('ended', () => {
+                        this.updateVideoStatus('Ended', '#ef4444');
+                    });
+                    
+                    this.videoPlayer.on('error', (e) => {
+                        console.error('Video player error:', e);
+                        this.updateVideoStatus('Error loading video', '#ef4444');
+                    });
+                    
+                    this.videoPlayer.on('loadeddata', () => {
+                        this.updateVideoStatus('Ready to play', '#10b981');
+                    });
+                    
+                } catch (error) {
+                    console.error('Failed to initialize video player:', error);
+                    this.updateVideoStatus('Player initialization failed', '#ef4444');
+                }
+            }
+            
+            bindEvents() {
+                // Load video button
+                document.getElementById('loadVideo').addEventListener('click', () => {
+                    const url = document.getElementById('videoUrl').value.trim();
+                    if (url) {
+                        this.loadVideo(url);
+                    } else {
+                        alert('Please enter a video URL');
+                    }
+                });
+                
+                // Sample buttons
+                document.querySelectorAll('.sample-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const url = e.target.dataset.url;
+                        document.getElementById('videoUrl').value = url;
+                        this.loadVideo(url);
+                    });
+                });
+                
+                // Enter key support
+                document.getElementById('videoUrl').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        document.getElementById('loadVideo').click();
+                    }
+                });
+                
+                // Install button
+                const installBtn = document.getElementById('installBtn');
+                installBtn.addEventListener('click', () => {
+                    this.installPWA();
+                });
+                
+                // Online/offline status
+                window.addEventListener('online', () => this.checkOnlineStatus());
+                window.addEventListener('offline', () => this.checkOnlineStatus());
+                
+                // Before install prompt
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    this.deferredPrompt = e;
+                    installBtn.style.display = 'flex';
+                    document.getElementById('pwaStatus').textContent = 'Installable';
+                    document.getElementById('pwaStatus').style.color = '#10b981';
+                });
+                
+                // App installed
+                window.addEventListener('appinstalled', () => {
+                    this.deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                    document.getElementById('pwaStatus').textContent = 'Installed ✓';
+                    document.getElementById('pwaStatus').style.color = '#10b981';
+                });
+            }
+            
+            loadVideo(url) {
+                try {
+                    this.updateVideoStatus('Loading...', '#3b82f6');
+                    document.getElementById('videoSource').textContent = 
+                        url.includes('cloudinary.com') ? 'Cloudinary' : 'External URL';
+                    
+                    // Extract public ID from Cloudinary URL
+                    if (url.includes('cloudinary.com')) {
+                        const urlObj = new URL(url);
+                        const pathParts = urlObj.pathname.split('/');
+                        const uploadIndex = pathParts.indexOf('upload');
+                        
+                        if (uploadIndex !== -1 && pathParts[uploadIndex + 1]) {
+                            const publicId = pathParts.slice(uploadIndex + 1).join('/').replace(/\.[^/.]+$/, "");
+                            this.videoPlayer.source(publicId);
+                        } else {
+                            this.videoPlayer.source({ sourceTypes: ['mp4'], source: url });
+                        }
+                    } else {
+                        this.videoPlayer.source({ sourceTypes: ['mp4'], source: url });
+                    }
+                    
+                } catch (error) {
+                    console.error('Error loading video:', error);
+                    this.updateVideoStatus('Error: ' + error.message, '#ef4444');
+                    alert('Failed to load video. Please check the URL.');
+                }
+            }
+            
+            updateVideoStatus(text, color = '#000') {
+                const statusEl = document.getElementById('videoStatus');
+                statusEl.textContent = text;
+                statusEl.style.color = color;
+            }
+            
+            initPWA() {
+                // Register service worker
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(registration => {
+                            console.log('Service Worker registered:', registration);
+                            document.getElementById('pwaStatus').textContent = 'Service Worker Active';
+                        })
+                        .catch(error => {
+                            console.error('Service Worker registration failed:', error);
+                            document.getElementById('pwaStatus').textContent = 'Service Worker Failed';
+                        });
+                } else {
+                    document.getElementById('pwaStatus').textContent = 'Service Worker Not Supported';
+                }
+                
+                // Check if already installed
+                if (window.matchMedia('(display-mode: standalone)').matches) {
+                    document.getElementById('installBtn').style.display = 'none';
+                    document.getElementById('pwaStatus').textContent = 'Running as PWA';
+                }
+            }
+            
+            async installPWA() {
+                if (!this.deferredPrompt) {
+                    alert('This app is already installed or installation is not available.');
+                    return;
+                }
+                
+                this.deferredPrompt.prompt();
+                const { outcome } = await this.deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    console.log('User accepted PWA installation');
+                } else {
+                    console.log('User declined PWA installation');
+                }
+                
+                this.deferredPrompt = null;
+            }
+            
+            checkOnlineStatus() {
+                const isOnline = navigator.onLine;
+                const statusEl = document.getElementById('offlineStatus');
+                const appStatusEl = document.getElementById('appStatus');
+                
+                if (isOnline) {
+                    statusEl.innerHTML = '<i class="fas fa-wifi"></i><span>Online</span>';
+                    statusEl.className = 'offline-indicator';
+                    appStatusEl.textContent = 'Online';
+                    appStatusEl.style.color = '#10b981';
+                } else {
+                    statusEl.innerHTML = '<i class="fas fa-wifi-slash"></i><span>Offline</span>';
+                    statusEl.className = 'offline-indicator offline';
+                    appStatusEl.textContent = 'Offline';
+                    appStatusEl.style.color = '#ef4444';
+                }
+            }
+        }
+        
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CloudinaryVideoPWA();
+        });
+        
+        // Prevent right-click context menu on video
+        document.addEventListener('contextmenu', (e) => {
+            if (e.target.tagName === 'VIDEO') {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
